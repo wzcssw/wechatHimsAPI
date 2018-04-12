@@ -42,6 +42,10 @@ func main() {
 	DB, _ = gorm.Open("mysql", "root:n[h^nM06@tcp(test.tongxinyiliao.com:3306)/txhims_staging?charset=utf8&parseTime=true")
 	r := gin.Default()
 
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{"你": "逗比"})
+	})
+
 	r.GET("/patient_infos/get_queue_data", func(c *gin.Context) {
 		result := gin.H{}
 		patientInfos := []PatientInfo{}
