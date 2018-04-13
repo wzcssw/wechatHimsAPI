@@ -1,6 +1,8 @@
 package api
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,6 +21,12 @@ ____________________
 
 func init() {
 	Router = gin.Default()
+
+	// Interceptor (access_token)
+	Router.Use(func(c *gin.Context) {
+		token := c.GetHeader("access_token")
+		fmt.Println("======= access_token: " + token + " =======")
+	})
 
 	// index
 	Router.GET("/", func(c *gin.Context) {

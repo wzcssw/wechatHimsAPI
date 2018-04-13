@@ -7,6 +7,8 @@ import (
 	"github.com/go-redis/redis"
 )
 
+const KeyHead = "wechat_hims_api:"
+
 var RedisClient *redis.Client
 
 func InitRedisClient() {

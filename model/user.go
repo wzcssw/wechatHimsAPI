@@ -4,8 +4,6 @@ import (
 	"wechatHimsAPI/lib"
 )
 
-const keyHead = "wechat_hims_api:"
-
 type User struct {
 	ID             uint
 	Name           string
@@ -27,13 +25,13 @@ func (user *User) Auth(pwd string) *User {
 
 func (user *User) SaveAccessToken() string {
 	accessToken := lib.GetMd5(user.Name)
-	// ps: key: wechat_hims_api:f0a185d9c948178ec108f2d50bed48c5   value: 4
-	lib.RedisClient.Set(keyHead+accessToken, user.ID, 0)
+	// ps: key: wechat_hims_api:f0a185d9c948178ec108f2d50bed48c5  value: 4
+	lib.RedisClient.Set(lib.KeyHead+accessToken, user.ID, 0)
 	return accessToken
 }
 
 func GetUserByAccessToken(accessToken string) *User {
-	stringCmd := lib.RedisClient.Get(keyHead + accessToken)
+	stringCmd := lib.RedisClient.Get(lib.KeyHead + accessToken)
 	if result := stringCmd.Val(); result == "" {
 		return nil
 	} else {
