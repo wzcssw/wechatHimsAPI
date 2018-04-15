@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"strings"
 	"wechatHimsAPI/model"
 
@@ -29,6 +30,7 @@ func init() {
 			c.Next()
 		} else {
 			token := c.Request.Header.Get("access_token")
+			log.Println("[Token] access_token:", token, " userID:", model.GetUserIDByAccessToken(token)) // test
 			if userID := model.GetUserIDByAccessToken(token); userID == "" {
 				c.JSON(200, gin.H{"success": false, "msg": "access_token invalid"})
 				c.Abort()
