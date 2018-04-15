@@ -1,6 +1,7 @@
 package model
 
 import (
+	"time"
 	"wechatHimsAPI/lib"
 
 	"github.com/gin-gonic/gin"
@@ -29,7 +30,8 @@ func (user *User) Auth(pwd string) *User {
 func (user *User) SaveAccessToken() string {
 	accessToken := lib.GetMd5(user.Name)
 	// ps: key: wechat_hims_api:f0a185d9c948178ec108f2d50bed48c5  value: 4
-	lib.RedisClient.Set(lib.KeyHead+accessToken, user.ID, 0)
+	// 24*30*12: one year
+	lib.RedisClient.Set(lib.KeyHead+accessToken, user.ID, time.Duration(24*30*12)*time.Hour)
 	return accessToken
 }
 
