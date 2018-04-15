@@ -2,8 +2,6 @@ package config
 
 const yamlFile = `
 
-
-
 development:
   port: :9091 
   database: txhims_staging

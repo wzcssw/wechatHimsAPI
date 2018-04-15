@@ -1,7 +1,8 @@
 package api
 
 import (
-	"fmt"
+	"strings"
+	"wechatHimsAPI/model"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,8 +25,17 @@ func init() {
 
 	// Interceptor (access_token)
 	Router.Use(func(c *gin.Context) {
-		token := c.GetHeader("access_token")
-		fmt.Println("======= access_token: " + token + " =======")
+		if strings.Contains(c.Request.URL.Path, "/users/authenticate") {
+			c.Next()
+		} else {
+			token := c.Request.Header.Get("access_token")
+			if userID := model.GetUserIDByAccessToken(token); userID == "" {
+				c.JSON(200, gin.H{"success": false, "msg": "access_token invalid"})
+				c.Abort()
+			} else {
+				c.Next()
+			}
+		}
 	})
 
 	// index

@@ -2,6 +2,8 @@ package model
 
 import (
 	"wechatHimsAPI/lib"
+
+	"github.com/gin-gonic/gin"
 )
 
 type User struct {
@@ -10,11 +12,12 @@ type User struct {
 	RealName       string
 	Phone          string
 	Email          string
-	PasswordDigest string
+	PasswordDigest string `json:"-"`
 	RoleID         string
 	HospitalID     uint
 }
 
+// 使用Bcrypt比对password
 func (user *User) Auth(pwd string) *User {
 	if lib.CheckPasswordHash(pwd, user.PasswordDigest) {
 		return user
@@ -39,4 +42,20 @@ func GetUserByAccessToken(accessToken string) *User {
 		lib.DB.Where("id=" + result).First(&user)
 		return &user
 	}
+}
+
+func GetUserIDByAccessToken(accessToken string) string {
+	stringCmd := lib.RedisClient.Get(lib.KeyHead + accessToken)
+	return stringCmd.Val()
+}
+
+func GetUserByAuth(username, password string) *User {
+	user := &User{}
+	lib.DB.Where("name = ?", username).First(user)
+	return user.Auth(password)
+}
+
+func CurrentUser(c *gin.Context) *User {
+	token := c.Request.Header.Get("access_token")
+	return GetUserByAccessToken(token)
 }

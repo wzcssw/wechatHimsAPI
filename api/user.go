@@ -1,7 +1,6 @@
 package api
 
 import (
-	"wechatHimsAPI/lib"
 	"wechatHimsAPI/model"
 
 	"github.com/gin-gonic/gin"
@@ -9,6 +8,17 @@ import (
 
 func init() {
 	user := Router.Group("/users")
+
+	user.GET("/current", func(c *gin.Context) {
+		result := gin.H{}
+		if user := model.CurrentUser(c); user == nil {
+			result["success"] = false
+		} else {
+			result["success"] = true
+			result["user"] = user
+		}
+		c.JSON(200, result)
+	})
 
 	user.POST("/authenticate", func(c *gin.Context) {
 		result := gin.H{}
@@ -20,9 +30,7 @@ func init() {
 			c.JSON(200, result)
 			return
 		}
-		user := &model.User{}
-		lib.DB.Where("name = ?", username).First(user)
-		user = user.Auth(password)
+		user := model.GetUserByAuth(username, password)
 		if user == nil {
 			result["success"] = false
 			result["msg"] = "the username or password is incorrect"
