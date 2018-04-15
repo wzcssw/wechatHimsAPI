@@ -58,6 +58,6 @@ func GetUserByAuth(username, password string) *User {
 }
 
 func CurrentUser(c *gin.Context) *User {
-	token := c.Request.Header.Get("access_token")
+	token := c.Request.Header.Get("access-token")
 	return GetUserByAccessToken(token)
 }

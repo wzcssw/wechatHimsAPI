@@ -38,7 +38,7 @@ func init() {
 			result["success"] = true
 			result["msg"] = "OK"
 			result["user"] = user
-			result["access_token"] = user.SaveAccessToken()
+			result["access-token"] = user.SaveAccessToken()
 		}
 		c.JSON(200, result)
 	})
