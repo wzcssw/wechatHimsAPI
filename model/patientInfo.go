@@ -36,7 +36,6 @@ func (patientInfo *PatientInfo) StateZH() string {
 	return patientInfoStates[patientInfo.State]
 }
 
-//  这里 finished_at 字段可能没有查询
 func GetQueue(hospitalID uint, currentTime string) ([]PatientInfo, error) {
 	patientInfos := []PatientInfo{}
 	sql := `select * from (select pi.id,pi.examine_finish_flag,pi.hospital_no,pi.film_no,pi.patient_name,pi.patient_sex,pi.patient_phone,pi.project_id,pi.project_name,
