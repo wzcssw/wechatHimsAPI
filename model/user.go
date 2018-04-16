@@ -10,7 +10,7 @@ import (
 type User struct {
 	ID             uint
 	Name           string
-	RealName       string
+	Realname       string
 	Phone          string
 	Email          string
 	PasswordDigest string `json:"-"`
