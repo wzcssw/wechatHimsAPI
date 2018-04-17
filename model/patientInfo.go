@@ -43,7 +43,7 @@ func GetQueue(hospitalID uint, currentTime string) ([]PatientInfo, error) {
 		left join reports r on pi.id = r.patient_info_id left join patient_info_dicoms pid on pi.id = pid.patient_info_id
 		where pi.hospital_id = ?
 		union
-		select '' as id,'' as hospital_no,'' as examine_finish_flag,'' as film_no,o.patient_name,null as patient_sex,o.patient_phone,o.project_id,o.project_name,
+		select 0 as id,0 as hospital_no,'' as examine_finish_flag,'' as film_no,o.patient_name,null as patient_sex,o.patient_phone,o.project_id,o.project_name,
 		o.body_description,o.diagnose_info,o.state as state,o.appointment_at,tpi.finished_at,o.order_code,false as can_print,false as is_print,'' as en_patient_name from orders o
 		left join patient_infos tpi on o.hospital_id = tpi.hospital_id and o.order_code = tpi.order_code
 		where tpi.id is null and o.hospital_id = ?) p
