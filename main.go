@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"wechatHimsAPI/api"
 	"wechatHimsAPI/config"
 	"wechatHimsAPI/lib"
@@ -15,5 +16,6 @@ func main() {
 	lib.InitDB()
 	lib.InitRedisClient()
 
+	fmt.Println("["+*ENV+"] server running  in "+*ENV+"", " enviorment.")
 	api.Router.Run(config.C["port"])
 }
