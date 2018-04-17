@@ -16,6 +16,7 @@ type User struct {
 	PasswordDigest string `json:"-"`
 	RoleID         string
 	HospitalID     uint
+	Hospital       Hospital
 }
 
 // 使用Bcrypt比对password
@@ -41,7 +42,7 @@ func GetUserByAccessToken(accessToken string) *User {
 		return nil
 	} else {
 		user := User{}
-		lib.DB.Where("id=" + result).First(&user)
+		lib.DB.First(&user, result).Related(&user.Hospital)
 		return &user
 	}
 }
@@ -52,8 +53,9 @@ func GetUserIDByAccessToken(accessToken string) string {
 }
 
 func GetUserByAuth(username, password string) *User {
-	user := &User{}
-	lib.DB.Where("name = ?", username).First(user)
+	user := User{}
+	lib.DB.Where("name = ?", username).First(&user)
+	lib.DB.Model(&user).Related(&user.Hospital)
 	return user.Auth(password)
 }
 

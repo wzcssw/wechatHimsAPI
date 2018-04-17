@@ -47,7 +47,7 @@ func GetQueue(hospitalID uint, currentTime string) ([]PatientInfo, error) {
 		o.body_description,o.diagnose_info,o.state as state,o.appointment_at,tpi.finished_at,o.order_code,false as can_print,false as is_print,'' as en_patient_name from orders o
 		left join patient_infos tpi on o.hospital_id = tpi.hospital_id and o.order_code = tpi.order_code
 		where tpi.id is null and o.hospital_id = ?) p
-		where p.state in (0,1,2,3) and DATE(p.appointment_at) = DATE(?)  order by p.appointment_at asc`
+		where p.state in (0,1,2,3) and DATE(p.appointment_at) = DATE(?) order by case when p.state!=2 then p.appointment_at end asc`
 	err := lib.DB.Raw(sql, hospitalID, hospitalID, currentTime).Scan(&patientInfos).Error
 	return patientInfos, err
 }
